@@ -4,105 +4,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>@yield('title', 'Inventori')</title>
+    <title>@yield('title', 'Dashboard')</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 </head>
-<body class="min-h-screen bg-slate-100 text-slate-800">
 
+<body>
+<div class="app-layout">
 
-    <header class="border-b border-slate-200 bg-white">
-        <div class="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+    {{-- SIDEBAR --}}
+    <aside class="sidebar">
+        <a href="{{ route('dashboard') }}" class="brand">
+            <span class="brand-icon">🛒</span>
+            <span>DVD Hub</span>
+        </a>
 
+        <div class="sidebar-section">Menu Utama</div>
+
+        <nav class="sidebar-nav">
             <a href="{{ route('dashboard') }}"
-            class="text-xl font-bold tracking-tight text-blue-700">
-                Inventori<span class="text-slate-800">App</span>
+                class="sidebar-link {{ request()->routeIs('dashboard*') ? 'active' : '' }}">
+                <span class="nav-icon">⌂</span>
+                Dashboard
+            </a>
+        </nav>
+
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-section">Data Master</div>
+
+        <nav class="sidebar-nav">
+            <a href="{{ route('barang.index') }}"
+                class="sidebar-link {{ request()->routeIs('barang.*') ? 'active' : '' }}">
+                <span class="nav-icon">📦</span>
+                Data Barang
             </a>
 
-            <nav class="flex flex-wrap items-center gap-2">
-                <a href="{{ route('dashboard') }}"
-                class="rounded-lg px-4 py-2 text-sm font-medium
-                        {{ request()->routeIs('dashboard*')
-                            ? 'bg-blue-50 text-blue-700'
-                            : 'text-slate-600 hover:bg-slate-100' }}">
-                    Dashboard
-                </a>
+            <a href="{{ route('satuan.index') }}"
+                class="sidebar-link {{ request()->routeIs('satuan.*') ? 'active' : '' }}">
+                <span class="nav-icon">📏</span>
+                Data Satuan
+            </a>
 
-                <a href="{{ route('barang.index') }}"
-                class="rounded-lg px-4 py-2 text-sm font-medium
-                        {{ request()->routeIs('barang.*')
-                            ? 'bg-blue-50 text-blue-700'
-                            : 'text-slate-600 hover:bg-slate-100' }}">
-                    Data Barang
-                </a>
-                <a href="{{ route('satuan.index') }}"
-                class="rounded-lg px-4 py-2 text-sm font-medium
-                        {{ request()->routeIs('satuan.*')
-                            ? 'bg-blue-50 text-blue-700'
-                            : 'text-slate-600 hover:bg-slate-100'}}">
-                    Data Satuan
-                </a>
-                <a href="{{ route('vendor.index') }}"
-                    class="rounded-lg px-4 py-2 text-sm font-medium
-                            {{ request()->routeIs('vendor.*')
-                                ? 'bg-blue-50 text-blue-700'
-                                : 'text-slate-600 hover:bg-slate-100' }}">
-                    Data Vendor
-                </a>
-                <a href="{{ route('role.index') }}"
-                    class="rounded-lg px-4 py-2 text-sm font-medium
-                            {{ request()->routeIs('role.*')
-                                ? 'bg-blue-50 text-blue-700'
-                                : 'text-slate-600 hover:bg-slate-100' }}">
-                    Data Role
-                </a>
-                <a href="{{ route('user.index') }}"
-                    class="rounded-lg px-4 py-2 text-sm font-medium
-                            {{ request()->routeIs('user.*')
-                                ? 'bg-blue-50 text-blue-700'
-                                : 'text-slate-600 hover:bg-slate-100' }}">
-                    Data User
-                </a>
-                <a href="{{ route('margin_penjualan.index') }}"
-                class="rounded-lg px-4 py-2 text-sm font-medium
-                        {{ request()->routeIs('margin-penjualan.*')
-                            ? 'bg-blue-50 text-blue-700'
-                            : 'text-slate-600 hover:bg-slate-100' }}">
-                    Margin Penjualan
-                </a>
-            </nav>
+            <a href="{{ route('vendor.index') }}"
+                class="sidebar-link {{ request()->routeIs('vendor.*') ? 'active' : '' }}">
+                <span class="nav-icon">🏢</span>
+                Data Vendor
+            </a>
 
+            <a href="{{ route('role.index') }}"
+                class="sidebar-link {{ request()->routeIs('role.*') ? 'active' : '' }}">
+                <span class="nav-icon">🛡️</span>
+                Data Role
+            </a>
+
+            <a href="{{ route('user.index') }}"
+                class="sidebar-link {{ request()->routeIs('user.*') ? 'active' : '' }}">
+                <span class="nav-icon">👥</span>
+                Data User
+            </a>
+
+            <a href="{{ route('margin_penjualan.index') }}"
+                class="sidebar-link {{ request()->routeIs('marginpenjualan.*') ? 'active' : '' }}">
+                <span class="nav-icon">📈</span>
+                Margin Penjualan
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-footer-card">
+                <strong>DVD Hub Inventory</strong>
+                <p>Kelola inventori DVD di sini.</p>
+            </div>
         </div>
-    </header>
+    </aside>
 
-    <main class="mx-auto max-w-7xl px-6 py-8">
+    {{-- AREA KONTEN --}}
+    <div class="main-area">
 
-        @if (session('success'))
-            <div class="mb-6 rounded-lg border border-green-200
-                        bg-green-50 px-4 py-3 text-sm text-green-700">
-                {{ session('success') }}
+        <header class="topbar">
+            <form class="topbar-search" action="#" method="GET"
+                onsubmit="return false;">
+                <span>⌕</span>
+                <input type="search"
+                        placeholder="Cari menu atau data..."
+                        aria-label="Cari menu atau data">
+            </form>
+
+            <div class="topbar-profile">
+                <div class="profile-avatar">A</div>
+                <div>
+                    <span class="profile-name">Administrator</span>
+                    <span class="profile-role">Manajemen Inventori</span>
+                </div>
             </div>
-        @endif
+        </header>
 
-        @if ($errors->any())
-            <div class="mb-6 rounded-lg border border-red-200
-                        bg-red-50 px-4 py-3 text-sm text-red-700">
-                <p class="mb-2 font-semibold">
-                    Data belum berhasil diproses:
-                </p>
+        <main class="main-content">
+            <div class="content-container">
 
-                <ul class="list-inside list-disc">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+                {{-- Notifikasi global: tampilkan sekali saja --}}
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        ✓ {{ session('success') }}
+                    </div>
+                @endif
+
+                @if (session('error'))
+                    <div class="alert alert-error">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
+                @yield('content')
+
             </div>
-        @endif
-
-        @yield('content')
-
-    </main>
-
+        </main>
+    </div>
+</div>
 </body>
 </html>

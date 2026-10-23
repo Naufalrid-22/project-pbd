@@ -4,43 +4,26 @@
 @section('title', 'Data Barang')
 
 @section('content')
+{{-- <div class="mx-auto max-w-7xl px-4 py-6"></div> --}}
+    <div class="page-heading">
+        <div>
+            <p class="page-eyebrow">Manajemen Inventori</p>
+            <h1 class="page-title">Data Barang</h1>
+            <p class="page-description">
+                Kelola data barang inventori supermarket.
+            </p>
+        </div>
 
-<div class="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-    <div>
-        <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-blue-600">
-            Master Data
-        </p>
-
-        <h1 class="text-3xl font-bold text-slate-900">
-            Data Barang
-        </h1>
-
-        <p class="mt-2 text-sm text-slate-500">
-            Kelola data barang yang tersedia dalam inventori.
-        </p>
+        <a href="{{ route('barang.create') }}" class="btn btn-primary">
+            + Tambah Barang
+        </a>
     </div>
+{{-- 
+<div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"> --}}
 
-    <a href="{{ route('barang.create') }}"
-        class="inline-flex items-center justify-center rounded-lg
-                bg-blue-600 px-5 py-3 text-sm font-semibold text-white
-                shadow-sm transition hover:bg-blue-700">
-        + Tambah Barang
-    </a>
-</div>
-
-<div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-
-    <div class="border-b border-slate-200 px-6 py-4">
-        <h2 class="font-semibold text-slate-800">
-            Daftar Barang
-        </h2>
-        <p class="mt-1 text-sm text-slate-500">
-            Berikut data barang yang tersimpan.
-        </p>
-    </div>
-
-    <div class="overflow-x-auto">
-        <table class="w-full text-left text-sm">
+    <div class="data-card">
+    <div class="table-wrapper">
+        <table>
             <thead class="bg-slate-50 text-xs uppercase text-slate-500">
                 <tr>
                     <th class="px-6 py-4">ID</th>
@@ -79,7 +62,7 @@
                         <td class="px-6 py-4">
                             @if ((string) $barang->status === '1')
                                 <span class="rounded-full bg-green-100 px-3 py-1
-                                             text-xs font-medium text-green-700">
+                                                text-xs font-medium text-green-700">
                                     Aktif
                                 </span>
                             @else
@@ -93,9 +76,7 @@
                         <td class="whitespace-nowrap px-6 py-4">
                             <div class="flex items-center justify-center gap-2">
                                 <a href="{{ route('barang.edit', $barang->idbarang) }}"
-                                    class="rounded-md bg-amber-100 px-3 py-2
-                                            text-xs font-semibold text-amber-700
-                                            hover:bg-amber-200">
+                                class="btn btn-edit">
                                     Edit
                                 </a>
 
@@ -105,10 +86,7 @@
                                     @csrf
                                     @method('DELETE')
 
-                                    <button type="submit"
-                                            class="rounded-md bg-red-100 px-3 py-2
-                                                    text-xs font-semibold text-red-700
-                                                    hover:bg-red-200">
+                                    <button type="submit" class="btn btn-delete">
                                         Hapus
                                     </button>
                                 </form>

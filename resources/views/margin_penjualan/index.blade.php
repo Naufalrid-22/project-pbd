@@ -2,25 +2,24 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mx-auto max-w-7xl px-4 py-6">
-    <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
+{{-- <div class="mx-auto max-w-7xl px-4 py-6"> --}}
+        <div class="page-heading">
         <div>
-            <h1 class="text-2xl font-bold text-slate-800">
-                Data Margin Penjualan
-            </h1>
-            <p class="mt-1 text-sm text-slate-500">
-                Kelola persentase margin dan user terkait.
+            <p class="page-eyebrow">Manajemen Inventori</p>
+            <h1 class="page-title">Data Margin Penjualan</h1>
+            <p class="page-description">
+                Kelola data margin penjualan inventori supermarket.
             </p>
         </div>
 
-        <a href="{{ route('margin_penjualan.create') }}"
-           class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700">
+        <a href="{{ route('margin_penjualan.create') }}" class="btn btn-primary">
             + Tambah Margin
         </a>
     </div>
 
-    <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
-        <table class="w-full text-left text-sm">
+    <div class="data-card">
+    <div class="overflow-x-auto">
+        <table>
             <thead class="bg-slate-100 text-slate-600">
                 <tr>
                     <th class="px-4 py-3">ID Margin</th>
@@ -69,20 +68,19 @@
                         </td>
 
                         <td class="px-4 py-3">
-                            <div class="flex justify-center gap-2">
+                            <div class="flex items-center justify-center gap-2">
                                 <a href="{{ route('margin_penjualan.edit', $margin->idmargin_penjualan) }}"
-                                   class="rounded-md bg-amber-100 px-3 py-1.5 font-medium text-amber-700 hover:bg-amber-200">
+                                class="btn btn-edit">
                                     Edit
                                 </a>
 
                                 <form action="{{ route('margin_penjualan.destroy', $margin->idmargin_penjualan) }}"
-                                      method="POST"
-                                      onsubmit="return confirm('Yakin ingin menghapus margin ini?')">
+                                    method="POST"
+                                    onsubmit="return confirm('Yakin ingin menghapus margin ini?')">
                                     @csrf
                                     @method('DELETE')
 
-                                    <button type="submit"
-                                            class="rounded-md bg-red-100 px-3 py-1.5 font-medium text-red-700 hover:bg-red-200">
+                                    <button type="submit" class="btn btn-delete">
                                         Hapus
                                     </button>
                                 </form>

@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mx-auto max-w-7xl px-4 py-6">
-    <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
+{{-- <div class="mx-auto max-w-7xl px-4 py-6"> --}}
+        <div class="page-heading">
         <div>
-            <h1 class="text-2xl font-bold text-slate-800">Data User</h1>
-            <p class="mt-1 text-sm text-slate-500">
-                Kelola akun pengguna dan role.
+            <p class="page-eyebrow">Manajemen Inventori</p>
+            <h1 class="page-title">Data User</h1>
+            <p class="page-description">
+                Kelola data pengguna inventori supermarket.
             </p>
         </div>
 
-        <a href="{{ route('user.create') }}"
-           class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700">
+        <a href="{{ route('user.create') }}" class="btn btn-primary">
             + Tambah User
         </a>
     </div>
@@ -26,8 +26,9 @@
         </div>
     @endif
 
-    <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
-        <table class="w-full text-left text-sm">
+    <div class="data-card">
+    <div class="overflow-x-auto">
+        <table>
             <thead class="bg-slate-100 text-slate-600">
                 <tr>
                     <th class="px-5 py-3">ID User</th>
@@ -48,20 +49,19 @@
                             {{ $user->nama_role ?? 'Role tidak ditemukan' }}
                         </td>
                         <td class="px-5 py-3">
-                            <div class="flex justify-center gap-2">
+                            <div class="flex items-center justify-center gap-2">
                                 <a href="{{ route('user.edit', $user->iduser) }}"
-                                   class="rounded-md bg-amber-100 px-3 py-1.5 font-medium text-amber-700 hover:bg-amber-200">
+                                class="btn btn-edit">
                                     Edit
                                 </a>
 
                                 <form action="{{ route('user.destroy', $user->iduser) }}"
-                                      method="POST"
-                                      onsubmit="return confirm('Yakin ingin menghapus user ini?')">
+                                    method="POST"
+                                    onsubmit="return confirm('Yakin ingin menghapus user ini?')">
                                     @csrf
                                     @method('DELETE')
 
-                                    <button type="submit"
-                                            class="rounded-md bg-red-100 px-3 py-1.5 font-medium text-red-700 hover:bg-red-200">
+                                    <button type="submit" class="btn btn-delete">
                                         Hapus
                                     </button>
                                 </form>
