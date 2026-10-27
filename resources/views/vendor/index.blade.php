@@ -20,24 +20,12 @@
         </p>
     </div>
 
-    <a href="{{ route('vendor.create') }}"
-       class="rounded-lg bg-blue-600 px-5 py-3 text-center
-              text-sm font-semibold text-white hover:bg-blue-700">
-        + Tambah Vendor
-    </a>
+    <a href="{{ route('vendor.create') }}" class="btn btn-primary">
+            + Tambah Vendor
+        </a>
 </div>
 
 <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-
-    <div class="border-b border-slate-200 px-6 py-4">
-        <h2 class="font-semibold text-slate-800">
-            Daftar Vendor
-        </h2>
-
-        <p class="mt-1 text-sm text-slate-500">
-            Data vendor yang tersimpan dalam sistem.
-        </p>
-    </div>
 
     <div class="overflow-x-auto">
         <table class="w-full text-left text-sm">
@@ -69,12 +57,12 @@
                         <td class="px-6 py-4">
                             @if ((string) $vendor->status === '1')
                                 <span class="rounded-full bg-green-100 px-3 py-1
-                                             text-xs font-medium text-green-700">
+                                                text-xs font-medium text-green-700">
                                     Aktif
                                 </span>
                             @else
                                 <span class="rounded-full bg-slate-100 px-3 py-1
-                                             text-xs font-medium text-slate-600">
+                                                text-xs font-medium text-slate-600">
                                     Tidak Aktif
                                 </span>
                             @endif
@@ -83,22 +71,22 @@
                         <td class="whitespace-nowrap px-6 py-4">
                             <div class="flex items-center justify-center gap-2">
                                 <a href="{{ route('vendor.edit', $vendor->idvendor) }}"
-                                   class="rounded-md bg-amber-100 px-3 py-2
-                                          text-xs font-semibold text-amber-700
-                                          hover:bg-amber-200">
+                                    class="rounded-md bg-amber-100 px-3 py-2
+                                            text-xs font-semibold text-amber-700
+                                            hover:bg-amber-200">
                                     Edit
                                 </a>
 
                                 <form action="{{ route('vendor.destroy', $vendor->idvendor) }}"
-                                      method="POST"
-                                      onsubmit="return confirm('Yakin ingin menghapus vendor ini?')">
+                                        method="POST"
+                                        onsubmit="return confirm('Yakin ingin menghapus vendor ini?')">
                                     @csrf
                                     @method('DELETE')
 
                                     <button type="submit"
                                             class="rounded-md bg-red-100 px-3 py-2
-                                                   text-xs font-semibold text-red-700
-                                                   hover:bg-red-200">
+                                                    text-xs font-semibold text-red-700
+                                                    hover:bg-red-200">
                                         Hapus
                                     </button>
                                 </form>

@@ -20,24 +20,12 @@
         </p>
     </div>
 
-    <a href="{{ route('satuan.create') }}"
-        class="rounded-lg bg-blue-600 px-5 py-3 text-center
-                text-sm font-semibold text-white hover:bg-blue-700">
-        + Tambah Satuan
+    <a href="{{ route('satuan.create') }}" class="btn btn-primary">
+            + Tambah Satuan
     </a>
 </div>
 
 <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-
-    <div class="border-b border-slate-200 px-6 py-4">
-        <h2 class="font-semibold text-slate-800">
-            Daftar Satuan
-        </h2>
-
-        <p class="mt-1 text-sm text-slate-500">
-            Total data pada halaman ini: {{ $satuans->count() }}
-        </p>
-    </div>
 
     <div class="overflow-x-auto">
         <table class="w-full text-left text-sm">

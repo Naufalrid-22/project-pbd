@@ -18,7 +18,7 @@
     </div>
 
     <a href="{{ route('role.create') }}"
-       class="rounded-lg bg-blue-600 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-blue-700">
+       class="btn btn-primary">
         + Tambah Role
     </a>
 </div>
