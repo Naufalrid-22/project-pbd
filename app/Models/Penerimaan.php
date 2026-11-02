@@ -1,0 +1,16 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Penerimaan extends Model
+{
+    protected $table = 'penerimaan';
+    protected $primaryKey = 'idpenerimaan';
+    public $incrementing = true;
+    public $timestamps = false;
+    protected $fillable = [
+        'idpengadaan', 'iduser', 'created_at', 'status',
+        ];
+}

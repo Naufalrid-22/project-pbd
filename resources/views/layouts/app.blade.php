@@ -9,7 +9,6 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 </head>
-
 <body>
 <div class="app-layout">
 
@@ -91,13 +90,48 @@
                         aria-label="Cari menu atau data">
             </form>
 
-            <div class="topbar-profile">
-                <div class="profile-avatar">A</div>
-                <div>
-                    <span class="profile-name">Administrator</span>
-                    <span class="profile-role">Manajemen Inventori</span>
-                </div>
-            </div>
+
+<div class="flex items-center gap-4">
+
+    {{-- Informasi Pengguna --}}
+    <div class="text-right">
+        <p class="font-semibold text-gray-800">
+            {{ Auth::user()->username }}
+        </p>
+
+        <p class="text-sm text-gray-500">
+            @if (Auth::user()->idrole == 1)
+                Administrator
+            @elseif (Auth::user()->idrole == 3)
+                Kasir
+            @else
+                Pengguna
+            @endif
+        </p>
+    </div>
+
+    {{-- Foto Profil --}}
+    <div class="w-10 h-10 rounded-full bg-blue-100
+                flex items-center justify-center
+                text-blue-600 font-bold">
+        {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
+    </div>
+
+    {{-- Tombol Logout --}}
+        <form action="{{ url('/logout') }}" method="POST">
+            @csrf
+
+            <button
+                type="submit"
+                class="bg-red-500 hover:bg-red-600
+                    text-white px-4 py-2 rounded-lg
+                    text-sm font-medium">
+                Logout
+            </button>
+        </form>
+
+    </div>
+
         </header>
 
         <main class="main-content">

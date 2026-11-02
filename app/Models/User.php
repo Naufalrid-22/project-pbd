@@ -15,18 +15,7 @@ class User extends Authenticatable
     protected $table = 'v_user';
     protected $primaryKey = 'iduser';
     public $incrementing = false;
-    protected $keyType = 'int';
     public $timestamps = false;
     protected $fillable = ['iduser', 'username', 'password', 'idrole',];
-    protected $hidden = ['password',];
-
-    public function role(): BelongsTo
-    {
-        return $this->belongsTo(Role::class, 'idrole', 'idrole');
-    }
-
-    public function marginPenjualan(): HasMany
-    {
-        return $this->hasMany(MarginPenjualan::class, 'iduser', 'iduser');
-    }
+    protected $hidden = ['password'];
 }
