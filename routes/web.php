@@ -11,10 +11,12 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VendorController;
+use App\Http\Controllers\PenjualanController;
 
 Route::middleware('guest')
     ->group(function () {
-        Route::get('/login', [AuthController::class, 'showLogin']);
+        Route::get('/login', [AuthController::class, 'showLogin'])
+            ->name('login');
         Route::post('/login', [AuthController::class, 'login']);
     });
 
@@ -68,7 +70,16 @@ Route::middleware(['auth', 'role:1'])->group(function () {
 
 Route::middleware(['auth', 'role:1,3'])->group(function () {
 
-    // Route::get('/penjualan', [PenjualanController::class, 'index'])
-    //     ->name('penjualan.index');
+    Route::get('/penjualan', [PenjualanController::class, 'index'])
+        ->name('penjualan.index');
+
+    Route::get('/penjualan/create', [PenjualanController::class, 'create'])
+        ->name('penjualan.create');
+
+    Route::post('/penjualan', [PenjualanController::class, 'store'])
+        ->name('penjualan.store');
+
+    Route::get('/penjualan/{id}/detail', [PenjualanController::class, 'detail'])
+        ->name('penjualan.detail');
 
 });
