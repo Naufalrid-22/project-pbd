@@ -72,7 +72,6 @@ class PenerimaanController extends Controller
 
         DB::transaction(function () use ($request, $detail, &$idpenerimaan) {
 
-            // Membuat ID penerimaan
             $idpenerimaan = DB::table('penerimaan')->max('idpenerimaan') + 1;
 
             if (!$idpenerimaan) {

@@ -14,7 +14,7 @@ class PenjualanController extends Controller
             ->leftJoin('v_user_list as u', 'u.iduser', '=', 'p.iduser')
             ->leftJoin('v_margin_penjualan_list as m', 'm.idmargin_penjualan', '=', 'p.idmargin_penjualan')
             ->select('p.*', 'u.username', 'm.persen')
-            ->orderBy('p.created_at')
+            ->orderBy('p.created_at',)
             ->get();
 
         return view('penjualan.index', compact('penjualan'));
@@ -85,22 +85,12 @@ class PenjualanController extends Controller
                 $idDetail++;
             }
 
-            $subtotal = DB::table('detail_penjualan')
-                ->where('penjualan_idpenjualan', $idPenjualan)
-                ->sum('subtotal');
+            DB::statement('CALL sp_hitung_penjualan(?, ?)',
+            [
+                $idPenjualan,
+                $request->ppn_persen
+            ]);
 
-            $ppn = round($subtotal * $request->ppn_persen / 100);
-            $total = $subtotal + $ppn;
-
-
-            DB::table('penjualan')
-                ->where('idpenjualan', $idPenjualan)
-                ->update([
-                    'subtotal_nilai' => $subtotal,
-                    'ppn' => $ppn,
-                    'total_nilai' => $total,
-                ]);
-        
         });
 
         return redirect()->route('penjualan.index')

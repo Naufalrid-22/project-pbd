@@ -61,49 +61,33 @@ class PengadaanController extends Controller
             'harga_satuan.*' => 'required|integer|min:0',
         ]);
 
-        if (count($request->idbarang) !== count($request->jumlah) || count($request->idbarang) !== count($request->harga_satuan)) {
-            return back()
-            ->withInput()
-            ->withErrors(['idbarang' => 'Data detail barang tidak lengkap.']);
-        }
-
         DB::transaction(function () use ($request) {
             $idPengadaan = (Pengadaan::max('idpengadaan') ?? 0) + 1;
+            $idUser = $request->user()->iduser;
 
-            $subTotal = 0;
-
-            foreach ($request->idbarang as $i => $idBarang) {
-                $subTotal += (int) $request->jumlah[$i] * (int) $request->harga_satuan[$i];
-            }
-
-            $ppn = (int) round($subTotal * (float) $request->ppn_persen / 100);
-
-            Pengadaan::create([
-                'idpengadaan' => $idPengadaan,
-                'user_iduser' => $request->user_iduser,
-                'vendor_idvendor' => $request->vendor_idvendor,
-                'timestamp' => now(),
-                'status' => '1',
-                'sub_total' => $subTotal,
-                'ppn' => $ppn,
-                'total_nilai' => $subTotal + $ppn,
+            DB::statement('CALL sp_tambah_pengadaan(?, ?, ?)', [
+                $idPengadaan,
+                $idUser,
+                $request->vendor_idvendor
             ]);
 
+            $idDetail = (DetailPengadaan::max('iddetail_pengadaan') ?? 0) + 1;
+
+
             foreach ($request->idbarang as $i => $idBarang) {
-                $jumlah = (int) $request->jumlah[$i];
-                $harga = (int) $request->harga_satuan[$i];
 
-                $idDetail = (DetailPengadaan::max('iddetail_pengadaan') ?? 0) + 1;
-
-                DetailPengadaan::create([
-                    'iddetail_pengadaan' => $idDetail,
-                    'idpengadaan' => $idPengadaan,
-                    'idbarang' => $idBarang,
-                    'harga_satuan' => $harga,
-                    'jumlah' => $jumlah,
-                    'sub_total' => $jumlah * $harga,
+                DB::statement('CALL sp_tambah_detail_pengadaan(?, ?, ?, ?, ?, ?)', [
+                    $idDetail,
+                    $idPengadaan,
+                    $idBarang,
+                    $request->harga_satuan[$i],
+                    $request->jumlah[$i],
+                    $request->ppn_persen
                 ]);
+
+                $idDetail++;
             }
+
         });
 
         return redirect()

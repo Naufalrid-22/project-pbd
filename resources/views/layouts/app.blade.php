@@ -70,6 +70,31 @@
             </a>
         </nav>
 
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-section">Data Transaksi</div>
+
+        <nav class="sidebar-nav">
+
+            @if (auth()->user()->iduser ==1)
+            <a href="{{ route('pengadaan.index') }}" class="sidebar-link {{ request()->routeIs('pengadaan.*') ? 'active' : '' }}">
+                <span class="nav-icon">🛒</span>
+                Data Pengadaan
+            </a>
+
+            <a href="{{ route('penerimaan.index') }}" class="sidebar-link {{ request()->routeIs('penerimaan.*') ? 'active' : '' }}">
+                <span class="nav-icon">📥</span>
+                Data Penerimaan
+            </a>
+
+            @endif
+
+            <a href="{{ route('penjualan.index') }}" class="sidebar-link {{ request()->routeIs('penjualan.*') ? 'active' : '' }}">
+                <span class="nav-icon">🧾</span>
+                Data Penjualan
+            </a>
+
+        </nav>
+
         <div class="sidebar-footer">
             <div class="sidebar-footer-card">
                 <strong>DVD Hub Inventory</strong>
