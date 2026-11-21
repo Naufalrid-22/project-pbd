@@ -131,4 +131,15 @@ class PengadaanController extends Controller
 
         return view('pengadaan.show', compact('item', 'detail'));
     }
+
+    public function kirim($id)
+    {
+        DB::statement('CALL sp_kirim_pengadaan(?)',[
+            $id
+        ]);
+
+        return redirect()
+            ->route('pengadaan.index')
+            ->with('success', 'Pengadaan berhasil dikirim.');
+    }
 }

@@ -58,6 +58,9 @@ Route::middleware(['auth', 'role:1'])->group(function () {
         ->whereNumber('id')
         ->name('pengadaan.show');
 
+    Route::post('/pengadaan/{id}/kirim', [PengadaanController::class, 'kirim'])
+        ->name('pengadaan.kirim');
+
     Route::post('/pengadaan', [PengadaanController::class, 'store'])
         ->name('pengadaan.store');
 
@@ -66,6 +69,15 @@ Route::middleware(['auth', 'role:1'])->group(function () {
 
     Route::post('/penerimaan', [PenerimaanController::class, 'store'])
         ->name('penerimaan.store');
+
+    Route::get('/penerimaan/{id}', [PenerimaanController::class, 'show'])
+        ->name('penerimaan.show');
+
+    Route::put('/penerimaan/detail/{id}', [PenerimaanController::class, 'update'])
+        ->name('penerimaan.update');
+
+    Route::post('/penerimaan/{id}/konfirmasi', [PenerimaanController::class, 'konfirmasi'])
+        ->name('penerimaan.konfirmasi');
     });
 
 Route::middleware(['auth', 'role:1,3'])->group(function () {

@@ -20,12 +20,6 @@
         </a>
     </div>
 
-    @if (session('success'))
-        <div class="bg-green-100 text-green-700 p-4 rounded-xl mb-5">
-            {{ session('success') }}
-        </div>
-    @endif
-
     <div class="bg-white rounded-2xl shadow-sm border
                 border-gray-100 overflow-x-auto">
 
@@ -68,10 +62,37 @@
                             Rp {{ number_format($item->total_nilai ?? 0, 0, ',', '.') }}
                         </td>
                         <td class="px-5 py-4">
-                            <a href="{{ route('pengadaan.show', $item->idpengadaan) }}"
-                                class="inline-block bg-blue-50 text-blue-700 hover:bg-blue-100 px-4 py-2 rounded-lg font-medium">
-                                Detail
-                            </a>
+                            <div class="flex items-center gap-2">
+
+                                <a href="{{ route('pengadaan.show', $item->idpengadaan) }}"
+                                    class="inline-block bg-blue-50 text-blue-700 hover:bg-blue-100 px-4 py-2 rounded-lg font-medium">
+                                    Detail
+                                </a>
+
+                                @if ($item->status == '0')
+                                    <form action="{{ route('pengadaan.kirim', $item->idpengadaan) }}"
+                                        method="POST"
+                                        onsubmit="return confirm('Kirim pengadaan ini?')">
+                                        @csrf
+
+                                        <button type="submit"
+                                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                                            Kirim Pengadaan
+                                        </button>
+                                    </form>
+
+                                @elseif ($item->status == 'P')
+                                    <span class="bg-blue-50 text-blue-700 px-3 py-2 rounded-lg font-medium">
+                                        Dalam Proses
+                                    </span>
+
+                                @else
+                                    <span class="bg-green-50 text-green-700 px-3 py-2 rounded-lg font-medium">
+                                        Selesai
+                                    </span>
+                                @endif
+
+                            </div>
                         </td>
                     </tr>
                 @empty
