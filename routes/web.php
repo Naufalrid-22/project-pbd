@@ -12,6 +12,7 @@ use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\PenjualanController;
+use App\Http\Controllers\StokController;
 
 Route::middleware('guest')
     ->group(function () {
@@ -78,6 +79,9 @@ Route::middleware(['auth', 'role:1'])->group(function () {
 
     Route::post('/penerimaan/{id}/konfirmasi', [PenerimaanController::class, 'konfirmasi'])
         ->name('penerimaan.konfirmasi');
+
+    Route::get('/stok', [StokController::class, 'index'])
+        ->name('stok.index');
     });
 
 Route::middleware(['auth', 'role:1,3'])->group(function () {

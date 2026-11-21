@@ -93,6 +93,26 @@
                 Data Penjualan
             </a>
 
+            @if (auth()->user()->idrole == 1)
+
+                <div class="sidebar-divider"></div>
+
+                <div class="sidebar-section">
+                    Persediaan
+                </div>
+
+                <nav class="sidebar-nav">
+                    <a href="{{ route('stok.index') }}"
+                    class="sidebar-link {{ request()->routeIs('stok.*') ? 'active' : '' }}">
+
+                        <span class="nav-icon">📦</span>
+                        Stok Barang
+
+                    </a>
+                </nav>
+
+            @endif
+
         </nav>
 
         <div class="sidebar-footer">

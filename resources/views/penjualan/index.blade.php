@@ -10,17 +10,10 @@
             <p class="text-gray-500">Daftar transaksi penjualan supermarket</p>
         </div>
 
-        <a href="{{ route('penjualan.create') }}"
-           class="btn btn-primary">
+        <a href="{{ route('penjualan.create') }}" class="btn btn-primary">
             + Tambah Penjualan
         </a>
     </div>
-
-    @if(session('success'))
-        <div class="bg-green-100 text-green-700 p-3 rounded-lg mb-4">
-            {{ session('success') }}
-        </div>
-    @endif
 
     <div class="bg-white rounded-xl shadow overflow-x-auto">
         <table class="w-full text-sm text-left">

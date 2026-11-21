@@ -38,7 +38,7 @@ class PenjualanController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'idmargin_penjualan' => 'required|integer',
+            'idmargin_penjualan' => 'required|integer|exists:v_margin_penjualan_list,idmargin_penjualan',
             'ppn_persen' => 'required|numeric|min:0|max:100',
 
             'idbarang' => 'required|array|min:1',
@@ -49,52 +49,72 @@ class PenjualanController extends Controller
         ]);
 
         if (count($validated['idbarang']) !== count($validated['jumlah'])) {
-            throw ValidationException::withMessages(['idbarang' => 'Data barang dan jumlah tidak sesuai!']);
+            throw ValidationException::withMessages([
+                'idbarang' => 'Data barang dan jumlah tidak sesuai!'
+            ]);
         }
 
-        DB::transaction(function () use ($request) {
-            $idPenjualan = DB::table('penjualan')->max('idpenjualan') + 1;
+        try {
+            DB::transaction(function () use ($request) {
 
-            DB::statement('CALL sp_tambah_penjualan(?, ?, ?)',
-            [
-                $idPenjualan,
-                $request->user()->iduser,
-                $request->idmargin_penjualan,
-            ]);
+                // Membuat ID penjualan
+                $idPenjualan = (DB::table('penjualan')
+                    ->lockForUpdate()
+                    ->max('idpenjualan') ?? 0) + 1;
 
-            $idDetail = DB::table('detail_penjualan')->max('iddetail_penjualan') + 1;
+                // Memanggil SP tambah penjualan
+                DB::statement('CALL sp_tambah_penjualan(?, ?, ?)', [
+                    $idPenjualan,
+                    $request->user()->iduser,
+                    $request->idmargin_penjualan,
+                ]);
 
-            foreach ($request->idbarang as $i => $idbarang) {
-                $stok = DB::table('kartu_stok')
-                    ->where('idbarang', $idbarang)
-                    ->sum(DB::raw('COALESCE(masuk, 0) - COALESCE(keluar, 0)'));
+                // Membuat ID detail
+                $idDetail = (DB::table('detail_penjualan')
+                    ->lockForUpdate()
+                    ->max('iddetail_penjualan') ?? 0) + 1;
 
-                if ($request->jumlah[$i] > $stok) {
-                    throw new \Exception('Stok barang tidak mencukupi.');
+                foreach ($request->idbarang as $i => $idbarang) {
+
+                    // Menghitung stok tersedia
+                    $stok = DB::table('kartu_stok')
+                        ->where('idbarang', $idbarang)
+                        ->sum(DB::raw('COALESCE(masuk, 0) - COALESCE(keluar, 0)'));
+
+                    // Memeriksa stok
+                    if ($request->jumlah[$i] > $stok) {
+                        throw new \Exception(
+                            'Stok barang ' . $idbarang . ' tidak mencukupi. Stok tersedia: ' . $stok
+                        );
+                    }
+
+                    // Memasukkan detail penjualan
+                    DB::statement('CALL sp_tambah_detail_penjualan(?, ?, ?, ?)', [
+                        $idDetail,
+                        $idPenjualan,
+                        $idbarang,
+                        $request->jumlah[$i],
+                    ]);
+
+                    $idDetail++;
                 }
 
-                DB::statement('CALL sp_tambah_detail_penjualan(?, ?, ?, ?)',
-                [
-                    $idDetail,
+                // Menghitung subtotal, PPN, dan total
+                DB::statement('CALL sp_hitung_penjualan(?, ?)', [
                     $idPenjualan,
-                    $idbarang,
-                    $request->jumlah[$i],
-                ]
-                );
+                    $request->ppn_persen
+                ]);
+            });
 
-                $idDetail++;
-            }
+            return redirect()->route('penjualan.index')
+                ->with('success', 'Penjualan berhasil disimpan.');
 
-            DB::statement('CALL sp_hitung_penjualan(?, ?)',
-            [
-                $idPenjualan,
-                $request->ppn_persen
-            ]);
+        } catch (\Exception $e) {
 
-        });
-
-        return redirect()->route('penjualan.index')
-            ->with('success', 'Penjualan berhasil disimpan.');
+            return redirect()->back()
+                ->withInput()
+                ->with('error', $e->getMessage());
+        }
     }
 
     public function detail($id)
